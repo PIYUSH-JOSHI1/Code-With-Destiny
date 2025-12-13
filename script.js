@@ -881,6 +881,14 @@ async function createOrderViaBackend(name, email, whatsapp, amount, form, succes
             })
         });
         
+        console.log('📡 Order response status:', orderResponse.status);
+        
+        if (!orderResponse.ok) {
+            const errorText = await orderResponse.text();
+            console.error('❌ Server error response:', errorText);
+            throw new Error(`Server error: ${orderResponse.status} ${orderResponse.statusText}`);
+        }
+        
         const orderData = await orderResponse.json();
         
         if (orderData.status !== 'success') {
@@ -975,6 +983,14 @@ async function verifyPaymentViaBackend(razorpayOrderId, razorpayPaymentId, razor
                 order_id: orderId
             })
         });
+        
+        console.log('📡 Verify response status:', verifyResponse.status);
+        
+        if (!verifyResponse.ok) {
+            const errorText = await verifyResponse.text();
+            console.error('❌ Server error response:', errorText);
+            throw new Error(`Server error: ${verifyResponse.status} ${verifyResponse.statusText}`);
+        }
         
         const verifyData = await verifyResponse.json();
         
